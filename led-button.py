@@ -1,31 +1,35 @@
 #!/usr/bin/env python3
 import RPi.GPIO as GPIO
 
-LED_PIN = 11    # define the LED_PIN
-BUTTON_PIN = 12    # define the BUTTON_PIN
+# define led and button pins
+LED_PIN = 11
+BUTTON_PIN = 12
 
-def setup():
-	print ('Program is starting...')
-	GPIO.setmode(GPIO.BOARD)       # Numbers GPIOs by physical location
-	GPIO.setup(LED_PIN, GPIO.OUT)   # Set LED_PIN's mode is output
-	GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)    # Set BUTTON_PIN's mode is input, and pull up to high level(3.3V)
+print ('Program is starting...')
 
-def loop():
+# set Numbers GPIOs by physical location
+GPIO.setmode(GPIO.BOARD)     
+
+ # set led pin's mode is output
+GPIO.setup(LED_PIN, GPIO.OUT)
+
+# Set button pin's mode is input, and pull up to high level(3.3V)
+GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+try:
 	while True:
 		if GPIO.input(BUTTON_PIN) == GPIO.LOW:
-			GPIO.output(LED_PIN,GPIO.HIGH)
+			# turn led on
+			GPIO.output(LED_PIN, GPIO.HIGH)
 			print ('led on ...')
-		else :
-			GPIO.output(LED_PIN,GPIO.LOW)
+		else:
+			# turn led on
+			GPIO.output(LED_PIN, GPIO.LOW)
 			print ('led off ...')		
 
-def destroy():
-	GPIO.output(LED_PIN, GPIO.LOW)     # led off
-	GPIO.cleanup()                     # Release resource
+except KeyboardInterrupt:
+	# turn led off
+	GPIO.output(LED_PIN, GPIO.LOW)
 
-if __name__ == '__main__':     # Program start from here
-	setup()
-	try:
-		loop()
-	except KeyboardInterrupt:  # When 'Ctrl+C' is pressed, the child program destroy() will be  executed.
-		destroy()
+	# Release resource
+	GPIO.cleanup()
